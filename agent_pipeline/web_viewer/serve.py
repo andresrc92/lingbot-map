@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 """Serve the three.js viewer and the exported assets.
 
-    python blender_pipeline/web_viewer/serve.py [--port 8081]
+    python agent_pipeline/web_viewer/serve.py [--port 8081]
 
 Serves the repository root (the viewer reads data/blender/export/*) and opens at
-http://localhost:<port>/  ->  blender_pipeline/web_viewer/index.html
+http://localhost:<port>/  ->  agent_pipeline/web_viewer/index.html
 """
 import argparse
 import functools
@@ -25,7 +25,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         path, _, query = self.path.partition("?")
         if path in ("/", "/index.html"):
             self.send_response(302)
-            self.send_header("Location", "/blender_pipeline/web_viewer/" + ("?" + query if query else ""))
+            self.send_header("Location", "/agent_pipeline/web_viewer/" + ("?" + query if query else ""))
             self.end_headers()
             return
         super().do_GET()

@@ -6,11 +6,11 @@ import { PLYLoader } from "three/addons/loaders/PLYLoader.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 
 // ---------------------------------------------------------------------------------------
-// Assets: data/blender/export/<scene>_{baked,rebuild,scan}.glb, _points.ply, _trajectory.json
+// Assets: data/scenes/<scene>/export/<scene>_{baked,rebuild,scan}.glb, _points.ply, _trajectory.json
 // (all in glTF axes: Y up, metres). ?scene=<name> picks another export.
 const params = new URLSearchParams(location.search);
 const NAME = params.get("scene") || "home_living";
-const BASE = `/data/blender/export/${NAME}`;
+const BASE = `/data/scenes/${NAME}/export/${NAME}`;
 const EYE = 1.6;
 const LIGHT_SCALE = 0.01;          // glTF light intensities -> plausible household bulbs
 

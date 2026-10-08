@@ -7,7 +7,7 @@ build/
 *.so
 .eggs/
 demo_render/
-CLAUDE.md
+# CLAUDE.md is tracked in this mirror (agent entry point)
 .claude/
 .agents/
 skyseg.onnx
@@ -15,9 +15,12 @@ skyseg.onnx
 weights/
 .DS_Store
 **/.DS_Store
-docs/
+/docs/
 
 
 # devcontainer workspace
 checkpoints/
 data/
+
+# agent pipeline (machine-specific)
+agent_pipeline/config.local.json

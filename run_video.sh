@@ -24,7 +24,7 @@ FPS="${FPS:-10}"
 export PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF:-expandable_segments:True}"
 
 usage() { sed -n 2,16p "$0"; exit 1; }
-[ "${1:-}" = web ] && { shift; exec python "$ROOT/blender_pipeline/web_viewer/serve.py" "$@"; }
+[ "${1:-}" = web ] && { shift; exec python "$ROOT/agent_pipeline/web_viewer/serve.py" "$@"; }
 [ $# -ge 2 ] || usage
 if [ "$1" = view-ply ]; then shift; exec python "$ROOT/tools/view_ply.py" "$@"; fi
 cmd="$1"; video="$(realpath -s "$2")"; shift 2

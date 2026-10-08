@@ -1,4 +1,14 @@
-# blender_pipeline: from a phone video to a Blender room and a web viewer
+# Lessons from the first run (home_living), written before the agent pipeline existed
+
+> **Historical record.** This is the write-up of the first, hand-driven run. The scripts it mentions under
+> `blender_pipeline/` have since become `agent_pipeline/`:
+> - `align.py`, `fuse.py`, `textures.py`, `export_web.py` → `stages/`
+> - `analysis/*` → `stages/analyze.py` and `stages/probe.py`
+> - `build_blender.py` → the generic `blender/build_scene.py` driven by `scenes/<scene>/scene.yaml`. The original is
+>   kept as `scenes/home_living/legacy_build_blender.py`.
+> - data → `data/scenes/<scene>/`
+>
+> The findings, numbers and pitfalls below are still valid and are the reason behind many pipeline defaults.
 
 This pipeline turns a LingBot-Map reconstruction (`./run_video.sh render <video>`) into three things:
 

@@ -97,8 +97,13 @@ python tools/npz_to_ply.py data/outputs/walk -o data/outputs/walk/walk_dense.ply
 toggle each one, adjust point size and display budget live, and the camera trajectory is drawn automatically.
 The `.ply` files also open in MeshLab or CloudCompare.
 
-## From video to a Blender scene and a web viewer
+## From video (or an RTAB-Map map) to a Blender scene and a web viewer
 
-See [`blender_pipeline/README.md`](blender_pipeline/README.md). It covers: aligning and fusing the reconstruction, measuring
-the room, rebuilding it in Blender (renders, PBR and baked-lighting `.glb`), and the three.js viewer
-(`./run_video.sh web` → http://localhost:8081). It also records the decisions, pitfalls and a checklist for new videos.
+That part is an agent-in-the-loop pipeline. Start at [`agent_pipeline/AGENTS.md`](agent_pipeline/AGENTS.md); there's a
+human overview in [`agent_pipeline/README.md`](agent_pipeline/README.md), and machine setup in
+[`agent_pipeline/docs/setup.md`](agent_pipeline/docs/setup.md).
+
+```bash
+python3 agent_pipeline/pipeline.py init my_room --video data/videos/my_room.mp4   # or --rtabmap path/to/map.db
+python3 agent_pipeline/pipeline.py run my_room                                     # stops at each agent task
+```
