@@ -1,0 +1,22 @@
+{
+  "name": "lingbot-map",
+  "build": { "dockerfile": "Dockerfile" },
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+  "workspaceFolder": "/workspace",
+  "runArgs": ["--gpus", "all", "--ipc", "host"],
+  "containerEnv": { "PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:True" },
+  "mounts": [
+    "source=lingbot-cache,target=/home/dev/.cache,type=volume"
+  ],
+  "remoteUser": "dev",
+  // Published with docker -p so the viewer is reachable from the devcontainer CLI too.
+  "appPort": [8080],
+  "portsAttributes": { "8080": { "label": "viser viewer" } },
+  "postCreateCommand": "bash /workspace/.devcontainer/post-create.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-python.python", "ms-toolsai.jupyter"],
+      "settings": { "python.defaultInterpreterPath": "/opt/venv/bin/python" }
+    }
+  }
+}

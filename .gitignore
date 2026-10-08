@@ -17,3 +17,7 @@ weights/
 **/.DS_Store
 docs/
 
+
+# devcontainer workspace
+checkpoints/
+data/

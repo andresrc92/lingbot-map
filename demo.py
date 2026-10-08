@@ -151,7 +151,8 @@ def load_model(args, device):
 
     if args.model_path:
         print(f"Loading checkpoint: {args.model_path}")
-        ckpt = torch.load(args.model_path, map_location=device, weights_only=False)
+        # Load on CPU: mapping straight to the GPU holds checkpoint + fp32 model at once (OOM on <=8 GB cards).
+        ckpt = torch.load(args.model_path, map_location="cpu", weights_only=False)
         state_dict = ckpt.get("model", ckpt)
         missing, unexpected = model.load_state_dict(state_dict, strict=False)
         if missing:
@@ -160,6 +161,11 @@ def load_model(args, device):
             print(f"  Unexpected keys: {len(unexpected)}")
         print("  Checkpoint loaded.")
 
+    # Cast the aggregator trunk to the inference dtype before moving to the GPU so the
+    # fp32 copy never lands in VRAM (heads stay fp32, same as the cast in demo.py main).
+    if device.type == "cuda" and getattr(model, "aggregator", None) is not None:
+        dtype = torch.bfloat16 if torch.cuda.get_device_capability()[0] >= 8 else torch.float16
+        model.aggregator = model.aggregator.to(dtype=dtype)
     return model.to(device).eval()
 
 
