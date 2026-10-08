@@ -96,3 +96,9 @@ python tools/npz_to_ply.py data/outputs/walk -o data/outputs/walk/walk_dense.ply
 `tools/view_ply.py` is a viser web viewer for any `.ply`/`.pcd`/`.glb` file. You can load several files at once,
 toggle each one, adjust point size and display budget live, and the camera trajectory is drawn automatically.
 The `.ply` files also open in MeshLab or CloudCompare.
+
+## From video to a Blender scene and a web viewer
+
+See [`blender_pipeline/README.md`](blender_pipeline/README.md). It covers: aligning and fusing the reconstruction, measuring
+the room, rebuilding it in Blender (renders, PBR and baked-lighting `.glb`), and the three.js viewer
+(`./run_video.sh web` → http://localhost:8081). It also records the decisions, pitfalls and a checklist for new videos.

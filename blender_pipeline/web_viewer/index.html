@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LingBot Room Viewer</title>
+<style>
+  :root {
+    --bg: #101113; --panel: rgba(22, 23, 26, 0.92); --line: #2c2e33; --text: #e6e6e6;
+    --muted: #9a9ca3; --accent: #e3a35b; --accent-ink: #1a1206;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
+    font: 13px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; overflow: hidden; }
+  #view { position: fixed; inset: 0; }
+  #panel { position: fixed; top: 12px; left: 12px; width: 290px; max-height: calc(100% - 24px); overflow: auto;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px;
+    backdrop-filter: blur(6px); }
+  #panel.collapsed .body { display: none; }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  h1 { font-size: 14px; margin: 0; font-weight: 600; letter-spacing: .2px; }
+  h2 { font-size: 11px; text-transform: uppercase; letter-spacing: .8px; color: var(--muted);
+    margin: 14px 0 6px; font-weight: 600; }
+  label.row { display: flex; align-items: center; gap: 8px; padding: 3px 0; cursor: pointer; }
+  label.row small { color: var(--muted); margin-left: auto; font-variant-numeric: tabular-nums; }
+  .slider { display: grid; grid-template-columns: 92px 1fr 40px; align-items: center; gap: 8px; padding: 3px 0; }
+  .slider span:last-child { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+  input[type=range] { width: 100%; accent-color: var(--accent); }
+  input[type=checkbox] { accent-color: var(--accent); }
+  select, button { width: 100%; background: #1d1f23; color: var(--text); border: 1px solid var(--line);
+    border-radius: 6px; padding: 6px 8px; font: inherit; }
+  button { cursor: pointer; }
+  button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+  button:hover { filter: brightness(1.12); }
+  .btns { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  #toggle { width: auto; padding: 2px 8px; }
+  #drop { border: 1px dashed var(--line); border-radius: 8px; padding: 10px; text-align: center; color: var(--muted); }
+  #drop.over { border-color: var(--accent); color: var(--text); }
+  #status { position: fixed; top: 12px; left: 50%; transform: translateX(-50%); background: var(--panel);
+    border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; color: var(--muted); pointer-events: none;
+    transition: opacity .3s; }
+  #hint { position: fixed; bottom: 12px; right: 12px; color: var(--muted); background: var(--panel);
+    border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; font-size: 12px; }
+  kbd { background: #26282d; border: 1px solid var(--line); border-radius: 4px; padding: 0 4px; font-size: 11px; }
+  @media (max-width: 600px) { #panel { width: calc(100% - 24px); } #hint { display: none; } }
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<div id="view"></div>
+<div id="panel">
+  <header><h1 id="title">Room viewer</h1><button id="toggle" title="Collapse">–</button></header>
+  <div class="body">
+    <h2>Layers</h2>
+    <div id="layers"></div>
+
+    <h2>View</h2>
+    <select id="viewpoint"><option value="">Viewpoint…</option></select>
+    <div class="btns" style="margin-top:6px">
+      <button id="walk">Walk <small>(WASD)</small></button>
+      <button id="fly" class="primary">Play video path</button>
+    </div>
+
+    <h2>Display</h2>
+    <div class="slider"><span>Exposure</span><input id="exposure" type="range" min="0.2" max="3" step="0.05" value="1"><span id="exposureV">1.00</span></div>
+    <div class="slider"><span>Live lights</span><input id="lights" type="range" min="0" max="3" step="0.05" value="1"><span id="lightsV">1.00</span></div>
+    <div class="slider"><span>Point size</span><input id="psize" type="range" min="1" max="12" step="0.5" value="3"><span id="psizeV">3.0</span></div>
+    <label class="row"><input id="cutCeiling" type="checkbox"> Hide ceiling (dollhouse)</label>
+
+    <h2>Open a file</h2>
+    <div id="drop">Drop .ply / .glb / .gltf here<br>or <a href="#" id="pick" style="color:var(--accent)">browse</a></div>
+    <input id="file" type="file" accept=".ply,.glb,.gltf" multiple hidden>
+    <div class="slider" style="grid-template-columns: 92px 1fr"><span>Up axis</span>
+      <select id="upaxis">
+        <option value="y">+Y (glTF / exported)</option>
+        <option value="z">+Z (Blender / aligned)</option>
+        <option value="cv">−Y (raw LingBot / OpenCV)</option>
+      </select></div>
+  </div>
+</div>
+<div id="status">Loading…</div>
+<div id="hint">Drag to orbit · right-drag to pan · scroll to zoom · <kbd>Walk</kbd>: WASD + mouse, <kbd>Esc</kbd> to exit</div>
+<script type="module" src="./main.js"></script>
+</body>
+</html>
