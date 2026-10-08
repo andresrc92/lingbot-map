@@ -10,6 +10,9 @@ This pipeline turns a LingBot-Map reconstruction (`./run_video.sh render <video>
 It was developed on `home_living.mp4`: 51 s, 848×478 at 60 fps, a handheld night walk from a hallway into a living room.
 Everything below states what was learned on that clip, so the next run on new data starts from there.
 
+For which inputs matter most to the Blender result, and how much the LingBot stage contributes, see
+[`WHAT_MATTERS.md`](WHAT_MATTERS.md).
+
 ```
 blender_pipeline/
   align.py           model frame -> metric Z-up frame (up vector, floor/ceiling, wall yaw, scale)   [container]
